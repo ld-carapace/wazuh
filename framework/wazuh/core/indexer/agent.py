@@ -1,5 +1,5 @@
 from dataclasses import asdict
-from typing import List
+from typing import List, Optional
 
 from opensearchpy import exceptions
 
@@ -71,7 +71,15 @@ class AgentsIndex(BaseIndex):
 
         return ids
 
-    async def search(self, query: dict) -> dict:
+    async def search(
+        self,
+        query: dict,
+        select: Optional[str] = None,
+        exclude: Optional[str] = None,
+        offset: Optional[int] = None,
+        limit: Optional[int] = None,
+        sort: Optional[str] = None
+    ) -> dict:
         """Perform a search operation with the given query.
 
         Parameters
@@ -85,7 +93,9 @@ class AgentsIndex(BaseIndex):
             The search result.
         """
         parameters = {IndexerKey.INDEX: self.INDEX, IndexerKey.BODY: query}
-        return await self._client.search(**parameters)
+        return await self._client.search(
+            **parameters, _source_includes=select, _source_excludes=exclude, size=limit, from_=offset, sort=sort
+        )
 
     async def get(self, uuid: str) -> Agent:
         """Retrieve an agent information.
@@ -94,12 +104,12 @@ class AgentsIndex(BaseIndex):
         ----------
         uuid : str
             Agent unique identifier.
-        
+
         Raises
         ------
         WazuhResourceNotFound(1701)
             If no agents exist with the uuid provided.
-        
+
         Returns
         -------
         Agent

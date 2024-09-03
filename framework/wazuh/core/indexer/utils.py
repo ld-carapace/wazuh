@@ -34,4 +34,4 @@ def get_source_items_id(search_result: dict) -> list:
     list
         Obtained id items.
     """
-    return [item[IndexerKey._ID] for item in get_source_items(search_result)]
+    return [item[IndexerKey.ID] for item in get_source_items(search_result)]
