@@ -230,11 +230,10 @@ void runStart(ConfHandler confManager)
             kvdbManager->initialize();
             LOG_INFO("KVDB initialized.");
             exitHandler.add(
-                [kvdbManager, getLambdaName = logging::getLambdaName(__FUNCTION__, "exitHandler")]()
+                [kvdbManager, functionName = logging::getLambdaName(__FUNCTION__, "exitHandler")]()
                 {
                     kvdbManager->finalize();
-                    const auto functionName = getLambdaName.c_str();
-                    LOG_INFO_L(functionName, "KVDB terminated.");
+                    LOG_INFO_L(functionName.c_str(), "KVDB terminated.");
                 });
         }
 
@@ -384,11 +383,10 @@ void runStart(ConfHandler confManager)
             api = std::make_shared<api::Api>(rbac);
             LOG_DEBUG("API created.");
             exitHandler.add(
-                [api, getLambdaName = logging::getLambdaName(__FUNCTION__, "exitHandler")]()
+                [api, functionName = logging::getLambdaName(__FUNCTION__, "exitHandler")]()
                 {
                     eMessage::ShutdownEMessageLibrary();
-                    const auto functionName = getLambdaName.c_str();
-                    LOG_INFO_L(functionName, "API terminated.");
+                    LOG_INFO_L(functionName.c_str(), "API terminated.");
                 });
 
             // Configuration manager
@@ -410,12 +408,8 @@ void runStart(ConfHandler confManager)
             // Policy
             {
                 api::policy::handlers::registerHandlers(policyManager, api);
-                exitHandler.add(
-                    [getLambdaName = logging::getLambdaName(__FUNCTION__, "exitHandler")]()
-                    {
-                        const auto functionName = getLambdaName.c_str();
-                        LOG_DEBUG_L(functionName, "Policy API terminated.");
-                    });
+                exitHandler.add([functionName = logging::getLambdaName(__FUNCTION__, "exitHandler")]()
+                                { LOG_DEBUG_L(functionName.c_str(), "Policy API terminated."); });
                 LOG_DEBUG("Policy API registered.");
             }
 
