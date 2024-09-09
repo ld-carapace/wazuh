@@ -79,7 +79,7 @@ function check-process
 function check-installation
 {
     $new_version = (Get-Content VERSION)
-    $counter = 5
+    $counter = 10
     while($new_version -eq $current_version -And $counter -gt 0)
     {
         write-output "$(Get-Date -format u) - Waiting for the Wazuh-Agent installation to end." >> .\upgrade\upgrade.log
