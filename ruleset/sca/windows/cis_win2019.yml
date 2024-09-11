@@ -1859,7 +1859,9 @@ checks:
       - "https://docs.microsoft.com/en-us/archive/blogs/secguide/security-baseline-for-windows-10-creators-update-v1703-final"
     condition: all
     rules:
-      - 'r:HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10 -> Start -> 1'
+      - 'r:HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10'
+      - 'r:HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10 -> Start'
+      - 'r:HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10 -> Start -> 4'
 
   # 18.3.3 Ensure 'Configure SMB v1 server' is set to 'Disabled' (Scored)
   - id: 16600
